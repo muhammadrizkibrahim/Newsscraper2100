@@ -1,6 +1,6 @@
-# 📰 NewsScraper2100
+# 📰 FAKTA: Fenomena Aktual Terkini
 
-**NewsScraper2100** adalah pengembangan dari proyek [okkymabruri/news-watch](https://github.com/okkymabruri/news-watch), dengan tambahan antarmuka web interaktif menggunakan **Streamlit**, serta scraping berita yang difokuskan untuk wilayah **Kepulauan Riau**.
+**FAKTA** adalah pengembangan dari proyek [okkymabruri/news-watch](https://github.com/okkymabruri/news-watch), dengan tambahan antarmuka web interaktif menggunakan **Streamlit**, serta scraping berita yang difokuskan untuk wilayah **Kepulauan Riau**.
 
 ---
 
@@ -8,10 +8,8 @@
 
 <div align="center">
   <img src="assets/preview.png" alt="NewsScraper2100 UI Preview" width="80%">
-  <p><i>Tampilan antarmuka NewsScraper2100</i></p>
+  <p><i>Tampilan antarmuka FAKTA</i></p>
 </div>
-
-> 💡 Ganti `assets/preview.png` dengan path gambar sesuai dengan struktur repo kamu.
 
 ---
 
@@ -37,47 +35,12 @@
 
 ---
 
-## 📦 Instalasi
-
-1. **Clone repositori ini:**
-```bash
-git clone https://github.com/username/newsscraper2100.git
-cd newsscraper2100
-```
-
-2. **(Opsional) Buat virtual environment:**
-```bash
-python -m venv env
-.\env\Scripts\activate
-```
-
-3. **Install dependensi:**
-```bash
-pip install -r requirements.txt
-```
-
-4. **Jalankan aplikasi:**
-```bash
-streamlit run app.py
-```
-
 ## 🗺️ Target Sumber & Wilayah
 
 Proyek ini secara khusus menargetkan scraping berita dari:
 Media nasional: Antaranews, Kompas, Detik, dll.
 Media lokal: Batamnews, Tribun Batam, dll.
 Dengan filter berita yang relevan terhadap wilayah Kepulauan Riau
-
-## 📁 Struktur Folder
-
-newsscraper2100/
-├── app.py                  # Streamlit app utama
-├── scraper/                # Modul scraper
-│   └── kpi_scraper.py      # Scraper untuk berita Kepri
-├── assets/                 # Gambar UI, wordcloud, ikon, dll
-├── data/                   # Data hasil scraping (CSV, JSON, dsb.)
-├── requirements.txt        # Daftar dependensi Python
-└── README.md               # Dokumentasi proyek
 
 ## 🙏 Kredit
 
