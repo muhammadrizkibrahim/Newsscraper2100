@@ -1,6 +1,6 @@
 import logging
 import re
-
+from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 from .basescraper import BaseScraper
 
@@ -15,8 +15,9 @@ class KompasScraper(BaseScraper):
         self.continue_scraping = True
 
     async def build_search_url(self, keyword, page):
+        query_params = {"q": keyword, "page": page}
         return await self.fetch(
-            f"https://search.kompas.com/search?q={keyword}&sort=latest&page={page}",
+            f"https://search.kompas.com/search?{urlencode(query_params)}",
             headers={"User-Agent": "Mozilla/5.0"},
         )
 
@@ -75,9 +76,8 @@ class KompasScraper(BaseScraper):
                     tag.extract()
 
             content = content_div.get_text(separator=" ", strip=True)
-            
-         #    sentiment = classify_sentiment_id(title)
-            
+
+            #    sentiment = classify_sentiment_id(title)
 
             publish_date = self.parse_date(publish_date_str, locales=["id"])
             if not publish_date:

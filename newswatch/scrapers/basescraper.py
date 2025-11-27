@@ -5,6 +5,8 @@ import dateparser
 
 from ..utils import AsyncScraper
 
+from urllib.parse import quote_plus  # Added for URL encoding
+
 
 class BaseScraper(AsyncScraper, ABC):
     def __init__(self, keywords, concurrency=10, queue_=None):
