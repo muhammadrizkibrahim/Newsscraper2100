@@ -15,7 +15,7 @@ class KompasScraper(BaseScraper):
         self.continue_scraping = True
 
     async def build_search_url(self, keyword, page):
-        query_params = {"q": keyword, "page": page}
+        query_params = {"q": keyword, "sort": "latest", "page": page}
         return await self.fetch(
             f"https://search.kompas.com/search?{urlencode(query_params)}",
             headers={"User-Agent": "Mozilla/5.0"},

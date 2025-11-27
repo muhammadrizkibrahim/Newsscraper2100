@@ -54,9 +54,7 @@ class DetikScraper(BaseScraper):
                         "-video",
                     ]
                 ):
-                    # Hanya ambil artikel dengan format /d-XXXXXXX/
-                    if "/d-" in href:
-                        filtered_hrefs.add(href)
+                    filtered_hrefs.add(href)
 
         logging.info(f"Found {len(filtered_hrefs)} valid article links")
         return filtered_hrefs if filtered_hrefs else None
