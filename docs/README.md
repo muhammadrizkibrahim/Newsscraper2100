@@ -35,10 +35,10 @@ Dengan filter berita yang relevan terhadap wilayah Kepulauan Riau
 
 ## 🙏 Kredit
 
-🔗 Original project: okkymabruri/news-watch
-🚀 Dikembangkan oleh: Muhammad Rizki
+- 🔗 Original project: okkymabruri/news-watch
+- 🚀 Dikembangkan oleh: Muhammad Rizki
 
 ## 📫 Kontak
 
-✉️ Email: muhammadrizky15.mr@gmail.com
-🌐 LinkedIn: -
+- ✉️ Email: muhammadrizky15.mr@gmail.com
+- 🌐 LinkedIn: -
