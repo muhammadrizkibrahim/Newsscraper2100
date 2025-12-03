@@ -4,15 +4,6 @@
 
 ---
 
-## 📸 Preview Antarmuka
-
-<div align="center">
-  <img src="assets/preview.png" alt="NewsScraper2100 UI Preview" width="80%">
-  <p><i>Tampilan antarmuka FAKTA</i></p>
-</div>
-
----
-
 ## 🚀 Fitur Utama
 
 - ✅ Web antarmuka berbasis **Streamlit**

@@ -132,19 +132,19 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
         df: DataFrame with sentiment analysis
         duration: Scraping duration in seconds
     """
-    
+
     if df is None or df.empty:
         st.warning("⚠️ Tidak ada data untuk dianalisis")
         return df
-    
+
     # Get sentiment summary
     summary = get_sentiment_summary(df)
-    
+
     st.write("## 📊 Hasil Analisis Sentimen")
-    
+
     # Display metrics
     col1, col2, col3, col4 = st.columns(4)
-    
+
     with col1:
         st.metric("Total Artikel", summary['total'])
     with col2:
@@ -155,20 +155,20 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
                  delta=None, delta_color="inverse")
     with col4:
         st.metric("Netral", f"{summary['neutral']} ({summary['neutral_pct']}%)")
-    
+
     if duration:
         st.info(f"⏱️ Waktu ekstraksi & analisis: {duration:.2f} detik")
-    
+
     # Visualizations
     st.write("### 📈 Visualisasi Sentimen")
-    
+
     tab1, tab2, tab3 = st.tabs(["📊 Distribusi", "📰 Per Sumber", "📅 Timeline"])
-    
+
     with tab1:
         # Pie chart
         fig_pie = create_sentiment_pie_chart(summary)
         st.plotly_chart(fig_pie, use_container_width=True)
-    
+
     with tab2:
         # Bar chart by source
         fig_bar = create_sentiment_bar_chart(df)
@@ -176,7 +176,7 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
             st.plotly_chart(fig_bar, use_container_width=True)
         else:
             st.info("Data sumber tidak tersedia")
-    
+
     with tab3:
         # Timeline
         fig_timeline = create_sentiment_timeline(df)
@@ -184,22 +184,10 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
             st.plotly_chart(fig_timeline, use_container_width=True)
         else:
             st.info("Data timeline tidak tersedia")
-    
-    # Data filtering
-    st.write("### 🔍 Filter & Preview Data")
-    
-    filter_option = st.selectbox(
-        "Pilih sentimen untuk ditampilkan:",
-        ["Semua", "Positive", "Negative", "Neutral"]
-    )
-    
-    if filter_option == "Semua":
-        display_df = df
-    else:
-        display_df = filter_by_sentiment(df, filter_option.lower())
-    
+
+    display_df = df
     st.write(f"**Menampilkan {len(display_df)} dari {len(df)} artikel**")
-    
+
     # Select columns to display
     display_columns = []
     if 'title' in display_df.columns:
@@ -218,7 +206,7 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
         display_columns.append('category')
     if 'keyword' in display_df.columns:
         display_columns.append('keyword')
-    
+
     # Display dataframe with index starting from 1
     if display_columns:
         st.dataframe(
@@ -227,7 +215,7 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
         )
     else:
         st.dataframe(display_df.reset_index(drop=True), use_container_width=True)
-    
+
     # Show detailed articles in expander
     with st.expander("📰 Lihat Detail Artikel"):
         for idx, row in display_df.head(10).iterrows():  # Show first 10
@@ -236,9 +224,9 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
                 'negative': '😞',
                 'neutral': '😐'
             }
-            
+
             st.markdown(f"### {sentiment_emoji.get(row.get('sentiment', 'neutral'), '📰')} {row.get('title', 'No Title')}")
-            
+
             col_a, col_b, col_c = st.columns(3)
             with col_a:
                 st.write(f"**Sentimen:** {row.get('sentiment', 'N/A').title()}")
@@ -246,16 +234,16 @@ def display_sentiment_analysis_results(df: pd.DataFrame, duration: float = None)
                 st.write(f"**Sumber:** {row.get('source', 'N/A')}")
             with col_c:
                 st.write(f"**Tanggal:** {row.get('publish_date', 'N/A')}")
-            
+
             if 'content' in row:
                 content_preview = str(row['content'])[:300] + "..." if len(str(row['content'])) > 300 else str(row['content'])
                 st.write(content_preview)
-            
+
             if 'link' in row:
                 st.markdown(f"[🔗 Baca selengkapnya]({row['link']})")
-            
+
             st.divider()
-    
+
     return display_df
 
 
@@ -272,16 +260,16 @@ def run_scraping_with_sentiment(
     Returns:
         (df_analyzed, duration, error_message)
     """
-    
+
     if not SENTIMENT_AVAILABLE:
         return None, 0, "Module sentiment_analyzer tidak tersedia"
-    
+
     try:
         start_time = time.time()
-        
+
         # Build command
         cmd = [sys.executable, "-m", "newswatch.cli"]
-        
+
         if keywords:
             cmd += ["--keywords", keywords]
         if start_date:
@@ -290,14 +278,14 @@ def run_scraping_with_sentiment(
             cmd += ["--scrapers", ",".join(scrapers)]
         if output_format:
             cmd += ["--output_format", output_format]
-        
+
         # Get output directory
         output_dir = Path("output")
         if output_dir.exists():
             before_files = set(output_dir.glob(f"*.{output_format}"))
         else:
             before_files = set()
-        
+
         # Run scraping
         result = subprocess.run(
             cmd, 
@@ -306,21 +294,21 @@ def run_scraping_with_sentiment(
             check=True, 
             timeout=600
         )
-        
+
         # Find new file
         if output_dir.exists():
             after_files = set(output_dir.glob(f"*.{output_format}"))
             new_files = after_files - before_files
-            
+
             if new_files:
                 latest_file = max(new_files, key=os.path.getctime)
-                
+
                 # Read file
                 if output_format == "csv":
                     df = pd.read_csv(latest_file)
                 else:
                     df = pd.read_excel(latest_file)
-                
+
                 # Filter Kepri if needed
                 if only_kepri and "content" in df.columns:
                     df = df[
@@ -335,25 +323,24 @@ def run_scraping_with_sentiment(
                         df["content"].str.contains("anambas", case=False, na=False) |
                         df["content"].str.contains("natuna", case=False, na=False)
                     ]
-                
+
                 # Analyze sentiment
-                st.info("🔄 Menganalisis sentimen...")
                 df_analyzed = analyze_dataframe_sentiment(df)
-                
+
                 duration = time.time() - start_time
-                
+
                 # Delete temporary file
                 try:
                     latest_file.unlink()
                 except:
                     pass
-                
+
                 return df_analyzed, duration, None
             else:
                 return None, 0, "Tidak ada data ditemukan dari ekstraksi"
         else:
             return None, 0, "Output folder tidak ditemukan"
-            
+
     except subprocess.TimeoutExpired:
         return None, 0, "Ekstraksi timeout setelah 10 menit"
     except subprocess.CalledProcessError as e:

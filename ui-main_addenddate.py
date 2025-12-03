@@ -142,7 +142,11 @@ def show_dataframe_preview(
             # Convert publish_date to datetime if it's not already
             df["publish_date"] = pd.to_datetime(df["publish_date"], errors="coerce")
             # Filter rows where publish_date is <= end_date
-            end_date_dt = pd.to_datetime(end_date)
+            end_date_dt = (
+                pd.to_datetime(end_date)
+                + pd.Timedelta(days=1)
+                - pd.Timedelta(seconds=1)
+            )
             df = df[df["publish_date"] <= end_date_dt]
             # Convert back to string for display
             df["publish_date"] = df["publish_date"].dt.strftime("%Y-%m-%d")
@@ -269,14 +273,13 @@ with st.form("scraper_form"):
         keywords = st.text_input(
             "Keywords (comma-separated)", "Harga Cabai, prabowo, BPS"
         )
-        start_date = st.date_input("Start Date", date.today())
+        start_date = st.date_input("Start Date", None)
         output_format = st.selectbox("Output Format", ["csv", "xlsx"])
         only_kepri = st.checkbox("Fokuskan hanya berita kepri?")
 
     with col2:
         scrapers = st.multiselect("Pilih Scrapers", available_scrapers)
-        end_date = st.date_input("End Date", date.today())
-
+        end_date = st.date_input("End Date", None)
 
     submitted = st.form_submit_button("🚀 Run Ekstraksi", type="primary")
 
@@ -303,7 +306,7 @@ if submitted:
 
     # Validate date range
     if start_date > end_date:
-        st.warning("⚠️ Tanggal mulai tidak boleh lebih baru dari tanggal akhir.")
+        st.warning("⚠️ Tanggal mulai tidak boleh lebih dari tanggal akhir.")
         st.stop()
 
     # Use a temporary output directory
